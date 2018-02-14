@@ -64,17 +64,19 @@ exports.deleteOrder = function(id){
       return orderDeleted;
     }
   }
+  return null;
 }
 
 exports.setOrder = function(id, status){
   var orderToModify = [];
   for (var i = 0; i < orders.length; i++) {
-    if (id==orders[i].id && status!==undefined) {
+    if (id==orders[i].id) {
         orders[i].status = status;
         orderToModify.push(orders[i]);
+        return orderToModify;
     }
   }
-  return orderToModify;
+  return null;
 }
 
   exports.reset = function(){

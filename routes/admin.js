@@ -34,8 +34,10 @@ router.get('/name/:token', function(req,res,next) {
 
 
 router.delete('/:id', function(req,res) {
-  if (Number.isInteger(parseInt(req.params.id)) && req.params.id >= 0 && orders.deleteOrder(req.params.id) != null) {
-    res.json(orders.deleteOrder(req.params.id));
+  var index = orders.deleteOrder(req.params.id);
+
+  if (Number.isInteger(parseInt(req.params.id)) && req.params.id >= 0 && index != null) {
+    res.json(index);
   } else {
     res.status(404).json({message : 'INVALID ID'})
   }
@@ -43,10 +45,12 @@ router.delete('/:id', function(req,res) {
 });
 
 router.put('/:id', function(req,res) {
+  var index = orders.setOrder(req.params.id,req.body.status);
+
   if (Number.isInteger(parseInt(req.params.id)) && req.params.id >= 0
-      && isNaN(req.body.status) && orders.setOrder(req.params.id,req.body.status) != null) {
-    res.status(201).json(orders.setOrder(req.params.id, req.body.status));
-  }else if (isNaN(req.params.id) && orders.setOrder(req.params.id,req.body.status) == null) {
+      && isNaN(req.body.status) && index != null) {
+    res.status(201).json(index);
+  }else if (isNaN(req.params.id) && index == null) {
     res.status(404).json({message: 'INVALID ID'});
   }else {
     res.status(400).json({message : 'ERROR!'})
