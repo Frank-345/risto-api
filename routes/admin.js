@@ -29,7 +29,13 @@ router.get('/status', function(req,res,next) {
 });
 
 router.get('/name/:token', function(req,res,next) {
-    res.status(200).json(orders.getOrderByToken(req.params.token))
+  var index = orders.getOrderByToken(req.params.token);
+
+  if (index===null) {
+    res.status(404).json({message : 'Client not found!'});
+  }else {
+    res.status(200).json(index);
+  }
 });
 
 
@@ -49,15 +55,17 @@ router.put('/:id', function(req,res) {
 
   if (Number.isInteger(parseInt(req.params.id)) && req.params.id >= 0
       && isNaN(req.body.status) && index != null) {
-    res.status(201).json(index);
-  }else if (isNaN(req.params.id) && index == null) {
-    res.status(404).json({message: 'INVALID ID'});
+        if (req.body.status=='new' || req.body.status=='ready' || req.body.status=='closed'){
+          res.status(201).json(index);
+        } else {
+          res.status(400).json({message : 'INVALID STATUS. An order must be new, ready or open'});
+        }
   }else {
-    res.status(400).json({message : 'ERROR!'})
+    res.status(404).json({message: 'INVALID ID'});
   }
 });
 
-router.put('/', function(req,res) {
+router.put('/reset', function(req,res) {
   res.json(orders.reset());
 
 })

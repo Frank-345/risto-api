@@ -92,7 +92,12 @@ exports.setOrder = function(id, status){
         res.push(orders[i]);
       }
     }
-    return res;
+    if (res.length!=0) {
+      return res;
+    }else {
+      return null;
+    }
+
   }
 
   exports.profit = function(){
